@@ -2,7 +2,7 @@
 	TO COMPILE:	Look at the Makefile (for your operating system)
              	as well as the assignment document
 
-	Title:			lab8_given.cpp (rename to lab8.cpp)
+	Title:			Prog3_given.cpp (rename to Prog3.cpp)
 	Author: 		(put your name)
 	Date Created: 	(date started on assignment)
 	Last Updated: 	
@@ -32,27 +32,39 @@ int main()
 	jsonString = downloadDataFromURL("https://put.your.url/here");
 	cout << endl;
 	
-	//parsing through the JSON data and print to screen
+	// try-catch is C++ exception handling needed for this program.
+    // The try statement allows you to define a block of code to be tested for errors while it is being executed.
     try 
 	{
-        // create the json object
+        // First, we are creating and initializing the json object by calling 
+        // the parse function, which takes the JSON string 
+        // and converts it into a JSON object that we can work with in C++.
         json jsonObject = json::parse(jsonString);
 		
-        // Access and print each object in the array using a range-based for loop (foreach loop)
-        // looking at the format, we need each element in the features dictionary
         cout << "Earthquakes with magnitude greater than or equal to 4.5: " << endl;
         int numGreater = 1;
-        // TO DO: copy/paste code from the lab document
-        for (string element : jsonObject) 
-		{
-            // looking at the way the data is formatted
-            // in each features there is a properties dictionary to access 
-            // the properties of a specific earthquake
+        
+        // Next, we are accessing the "features" array from the JSON object, 
+        // which contains information about each earthquake.
+       json features = jsonObject["features"];
 
-            // if the earthquakes have a magnitude greater than 4.5
-            // TO DO: copy/paste code from the lab document
-            if () {
-                cout << "Earthquake " << numGreater << ": \n\tPlace: " << element["properties"]["place"] << "\n\tMagnitude: " << element["properties"]["mag"]<< endl;
+        // Next, we are iterating through each element in the "features" array using a for loop.
+        for (unsigned int i = 0; i < features.size(); ++i)
+        {
+            // Inside the loop, we are accessing each earthquake's data 
+            //(element) by indexing into the "features" array.
+            json element = features[i];
+
+            // We need to checkif this particular earthquake at features[i] has a magnitude greater than 4.5
+            // In each features element, there is a "properties" dictionary that contains 
+            // the "mag" key for magnitude and "place" key for location
+            // Note that the "properties" dictionary has many other keys, but right now we 
+            // are only interested in "mag" and "place" for this part of the program
+            if (// TO DO: copy/paste code from the programming assignment document) 
+			{
+                cout << "Earthquake " << numGreater 
+                     << ": \n\tPlace: " << element["properties"]["place"] 
+                     << "\n\tMagnitude: " << element["properties"]["mag"]<< endl;
                 cout << endl;
                 numGreater++;
             }
@@ -62,14 +74,16 @@ int main()
 		}
 
         /*
-            TO DO: YOUR LOOP GOES HERE
-            Purpose: using the format given above, make a loop that will print
+            TO DO: YOUR FOR LOOP GOES HERE
+            Purpose: using the format given above, make a loop that will print ALL
                 the earthquakes that caused a tsunami
         */
 
     } 
+    // The catch statement allows you to define a block of code to be executed if an error occurs in the try block.
 	catch (exception& e) 
     {
+        // This is just going to print the exception (error) to the screen if there is one. 
         cerr << "Error: " << e.what() << endl;
     }
 
@@ -107,9 +121,11 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, ostream* 
 
 /*******************************************************************************	
 	Function:	downloadDataFromURL()
-	Purpose:	Using libcurl (CURL) to download data from a web page 
-				(JSON API endpoint) and stores into a ostringstream 
-				variable. Returning data as string.
+	Purpose:	This function uses CURL (libcurl) to transport the data from 
+                the website to your local machine and will store the data in 
+                an ostringstream variable called oss, which is then changed 
+                to a string and stored in a string variable that gets returned 
+                back to main and placed in a string variable named jsonString
 				
 	***Don't modify this function. It is correct.***
 *******************************************************************************/
